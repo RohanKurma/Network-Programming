@@ -1,0 +1,65 @@
+#THE FILE SERVER PART
+import socket
+
+# take server name and host name
+host = 'localhost'
+port = 6767
+
+# create a TCP Socket
+s = socket.socket()
+
+# bind socket to host and port number
+s.bind((host, port))
+
+# maximum one connection is accepted
+s.listen(1)
+
+# wait till client accepts the connection
+c, address = s.accept()
+print('The client accepted connections')
+
+# accept filename from client
+fname = c.recv(1024)
+
+# convert the filename into normal string
+fname = str(fname.decode())
+print('file name received from client: ' + fname)
+try:
+    # open the file at server side
+    f = open(fname, 'rb')
+    # read content to the file
+    content = f.read()
+    # send file content to the client
+    c.send(content)
+    print('the contents of the file is sent successfully to the client')
+    # close the file
+    f.close()
+except FileNotFoundError:
+    c.send(b'FileNotFound Error')
+
+# disconnect error
+c.close()
+............................+........................................................./.......................................................
+#THE FILE CLIENT PART
+import socket
+
+# TAKES SERVER NAME AND PORT NAME
+host = 'localhost'
+port = 6767
+# CREATE A TCP SOCKET
+s = socket.socket()
+# CONNCETING TO SERVER
+s.connect((host, port))
+
+# INPUT FILE NAME
+filename = input("Enter File Name: ")
+
+# SENDING THE FILENAME TO SERVER
+s.send(filename.encode())
+
+# RECEIVE  THE FILE CONTENT FROM THE SERVER
+content = s.recv(1024)
+print(content.decode())
+
+# DISCONNECT THE CLIENT
+s.close()
