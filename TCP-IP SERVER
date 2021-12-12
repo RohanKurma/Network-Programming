@@ -1,0 +1,25 @@
+import socket
+
+host = 'localhost'
+port = 5000
+s = socket.socket()
+
+# Bind the socket with port and server name
+s.bind((host, port))
+
+# Allow maximum 1 connection to the socket
+s.listen(1)
+
+# Wait till a client accepts connection
+c, addr = s.accept()
+
+# Display client address
+print("Connection form: ", str(addr))
+
+# Send message to client after encoding into
+c.send(b"Hello Clinet!, how are you")
+msg = "BYE"
+c.send(msg.encode())
+
+# Disconnect
+c.close()
